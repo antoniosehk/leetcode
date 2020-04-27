@@ -6,7 +6,8 @@ key observation:
     dp[row][col] = min(dp[row-1][col-1],
                        dp[row-1][col],
                        dp[row][col-1]) + 1
-space complexity: O(n*n)
+space complexity: O(n)
+Only two 1D arrays are needed: previous and current
 '''
 
 class Solution:
@@ -17,16 +18,15 @@ class Solution:
 
         num_rows = len(matrix)
         num_cols = len(matrix[0])
-
-        dp = [[0] * num_cols for _ in range(num_rows)]
         output = 0
 
         for row in range(num_rows):
+            current = [0] * num_cols
             for col in range(num_cols):
-                dp[row][col] = int(matrix[row][col])
-                if row - 1 >=0 and col-1 >= 0 and dp[row][col] == 1:
-                    dp[row][col] = min(dp[row-1][col-1], dp[row-1][col], dp[row][col-1]) + 1
-                output = max(output, dp[row][col])
-
+                current[col] = int(matrix[row][col])
+                if row - 1 >=0 and col-1 >= 0 and current[col] == 1:
+                    current[col] = min(previous[col-1], previous[col], current[col-1]) + 1
+                output = max(output, current[col])
+            previous = current
 
         return output * output
